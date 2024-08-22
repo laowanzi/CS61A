@@ -192,7 +192,9 @@ def always_roll(n):
     """
     assert n >= 0 and n <= 10
     # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
+    def res(score, opponent_score):
+        return n
+    return res
     # END PROBLEM 6
 
 
@@ -223,7 +225,13 @@ def is_always_roll(strategy, goal=GOAL):
     False
     """
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+    x, y = 0, 0 # 这里和其他语言不同，赋值需要一一对应
+    cur = strategy(x, y)
+    for x in range(0, goal):
+        for y in range(0, goal):
+            if cur != strategy(x, y):
+                return False
+    return True
     # END PROBLEM 7
 
 
@@ -239,7 +247,13 @@ def make_averaged(original_function, samples_count=1000):
     3.0
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def temp(*args):
+        res = 0
+        for i in range(0, samples_count):
+            res += original_function(*args)
+        res /= samples_count
+        return res
+    return temp
     # END PROBLEM 8
 
 
@@ -253,7 +267,7 @@ def max_scoring_num_rolls(dice=six_sided, samples_count=1000):
     1
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    
     # END PROBLEM 9
 
 
