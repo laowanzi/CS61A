@@ -31,10 +31,10 @@ def product(n, term):
     >>> product(3, triple)    # 1*3 * 2*3 * 3*3
     162
     """
-    res = 1
-    for i in range(1, n + 1):
-        res *= term(i)
-    return res
+    prod, k = 1, 1
+    while k <= n:
+        prod, k = term(k) * prod, k + 1
+    return prod
 
 
 def accumulate(fuse, start, n, term):
@@ -56,10 +56,18 @@ def accumulate(fuse, start, n, term):
     >>> accumulate(lambda x, y: x + y + 1, 2, 3, square)
     19
     """
-    res = start
-    for i in range(1, n + 1):
-        res = fuse(res, term(i)) # 别忘记更新res的值
-    return res
+    total, k = start, 1
+    while k <= n:
+        total, k = fuse(total, term(k)), k + 1
+    return total
+
+# Alternative solution
+def accumulate_reverse(fuse, start, n, term):
+    total, k = start, n
+    while k >= 1:
+        total, k = fuse(total, term(k)), k - 1
+    return total
+
 
 def summation_using_accumulate(n, term):
     """Returns the sum: term(1) + ... + term(n), using accumulate.
@@ -104,12 +112,10 @@ def make_repeater(f, n):
     >>> make_repeater(square, 3)(5) # square(square(square(5)))
     390625
     """
-    if n == 1:
-        return f
-    # 和答案相比比较丑陋，但是思想一致
-    def res(*args):
-        temp = make_repeater(f, n - 1)(*args)
-        return f(temp)
-    return res
-        
+    def repeater(x):
+        k = 0
+        while k < n:
+            x, k = f(x), k + 1
+        return x
+    return repeater
 

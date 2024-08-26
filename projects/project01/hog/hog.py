@@ -342,7 +342,16 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     # BEGIN PROBLEM 12
-    
+    # roll 0 whenever it would give you more points on average than rolling 6
+    if sus_update(0, score, opponent_score) - score > make_averaged(roll_dice)(6):
+        return 0
+    if sus_update(0, score, opponent_score) >= GOAL:
+        return 0
+    if sus_update(1, score, opponent_score) >= GOAL:
+        return 1
+    if sus_update(2, score, opponent_score) >= GOAL:
+        return 2
+    return 6
     # END PROBLEM 12
 
 
