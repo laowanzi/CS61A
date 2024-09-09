@@ -106,8 +106,6 @@ def accuracy(typed, source):
         if typed_words[i] == source_words[i]:
             count = count + 1
     return count * 100 / len(typed_words)
-
-
     # END PROBLEM 3
 
 
@@ -125,7 +123,7 @@ def wpm(typed, elapsed):
     """
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    return len(typed) / elapsed * 12
     # END PROBLEM 4
 
 
@@ -154,7 +152,24 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    my_list = list()
+    for word in word_list:
+        if word == typed_word:
+            return word
+        cur_diff = diff_function(typed_word, word, limit)
+        if cur_diff <= limit:
+            my_list.append(word)
+    if len(my_list) == 0:
+        return typed_word
+
+    target_word = my_list[0]
+    diff = diff_function(typed_word, target_word, limit)
+    for word in my_list:
+        cur_diff = diff_function(typed_word, word, limit)
+        if cur_diff < diff:
+            diff = cur_diff
+            target_word = word
+    return target_word
     # END PROBLEM 5
 
 
@@ -181,7 +196,16 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    if limit < 0:
+        return 0
+    min_len = min(len(typed), len(source))
+    count = abs(len(typed) - len(source))
+    if min_len == 0:
+        return count
+    if typed[0] != source[0]:
+        return feline_fixes(typed[1:], source[1:], limit - 1) + 1
+    else:
+        return feline_fixes(typed[1:], source[1:], limit)
     # END PROBLEM 6
 
 
