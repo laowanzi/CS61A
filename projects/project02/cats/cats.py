@@ -229,23 +229,39 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    # 突然难度飙升
+    # 似曾相识，原来是leetcode72 编辑距离
+    # if limit < 0: # Base cases should go here, you may add more base cases as needed.
+    #     # BEGIN
+    #     return 0
+    #     # END
+    # # Recursive cases should go below here
+    # if ___________: # Feel free to remove or add additional cases
+    #     # BEGIN
+    #     "*** YOUR CODE HERE ***"
+    #     # END
+    # else:
+    #     add = ... # Fill in these lines
+    #     remove = ...
+    #     substitute = ...
+    #     # BEGIN
+    #     "*** YOUR CODE HERE ***"
+    #     # END
+    return dp(typed, len(typed) - 1, source, len(source) - 1, limit)
+
+def dp(s1, i, s2, j, limit):
+    if limit < 0:
+        return 0
+    if i == -1:
+        return j + 1
+    if j == -1:
+        return i + 1
+    
+    if s1[i] == s2[j]:
+        return dp(s1, i - 1, s2, j - 1, limit)
+    return min(dp(s1, i, s2, j - 1, limit - 1) + 1, dp(s1, i - 1, s2, j, limit - 1) + 1, dp(s1, i - 1, s2, j - 1, limit - 1) + 1)
+        
+
 
 
 def final_diff(typed, source, limit):
@@ -285,7 +301,15 @@ def report_progress(typed, source, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    count = 0
+    for i in range(len(typed)):
+        if typed[i] == source[i]:
+            count = count + 1
+        else:
+            break
+    progress = count / len(source)
+    upload({'id': user_id, 'progress': progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -307,7 +331,14 @@ def time_per_word(words, timestamps_per_player):
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    res_list = list()
+    num = len(timestamps_per_player[0])
+    for a in timestamps_per_player:
+        time_list = list()
+        for i in range(1, num):
+            time_list.append(a[i] - a[i - 1])
+        res_list.append(time_list)
+    return match(words[0:len(res_list[0])], res_list)
     # END PROBLEM 9
 
 
@@ -329,7 +360,16 @@ def fastest_words(match):
     player_indices = range(len(get_all_times(match)))  # contains an *index* for each player
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    res = list()
+    for i in player_indices:
+        res.append(list())
+    for i in word_indices:
+        min = 0
+        for j in player_indices:
+            if get_all_times(match)[j][i] < get_all_times(match)[min][i]:
+                min = j
+        res[min].append(get_all_words(match)[i])
+    return res
     # END PROBLEM 10
 
 
@@ -378,7 +418,7 @@ def match_string(match):
     """A helper function that takes in a match data abstraction and returns a string representation of it"""
     return f"match({get_all_words(match)}, {get_all_times(match)})"
 
-enable_multiplayer = False  # Change to True when you're ready to race.
+enable_multiplayer = True  # Change to True when you're ready to race.
 
 ##########################
 # Command Line Interface #
